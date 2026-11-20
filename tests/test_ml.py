@@ -1,6 +1,7 @@
 """Tests de l'évaluation, de l'entraînement et du service de prédiction (P7 / P8)."""
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -105,3 +106,28 @@ def test_log_prediction_appends_json_lines(tmp_path):
 
 def test_target_column_is_binary(gold_frame):
     assert set(gold_frame[TARGET].unique()) <= {0, 1}
+
+
+def test_save_refuses_directory_outside_allowed_roots(trained):
+    result, _ = trained
+    with pytest.raises(ValueError, match="non autorisé"):
+        save(result, Path("/etc/unify"))
+
+
+def test_registry_ignores_malformed_entries(trained):
+    result, out = trained
+    (out / "registry.json").write_text(
+        json.dumps(
+            [
+                {"nom": "x"},
+                "corrompu",
+                {"nom": "ok", "date": "d", "auc": 0.8, "lift": 3.1, "statut": "REFUSE", "extra": 1},
+            ]
+        )
+    )
+    save(result, out)
+    names = [r["nom"] for r in json.loads((out / "registry.json").read_text())]
+    assert names == ["ok", result.card["nom"]]
+    (out / "registry.json").write_text('{"pas": "une liste"}')
+    save(result, out)
+    assert len(json.loads((out / "registry.json").read_text())) == 1

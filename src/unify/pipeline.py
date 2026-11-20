@@ -135,7 +135,9 @@ def run(
     report["mdm"] = mdm_job.run(spark, lake)
     report["gold"] = features_job.run(spark, lake, settings.snapshot_date, settings.horizon_days)
     gold_spark = spark.read.parquet(lake.gold("ft_client_resiliation"))
-    gold = gold_spark.toPandas()
+    # GOLD = 1 ligne par client (8 000 ici, 17 M en PRD ≈ 2 Go) : la conversion Arrow vers
+    # pandas est assumée pour scikit-learn ; le modèle distribué est entraîné par train_job.
+    gold = gold_spark.toPandas()  # NOSONAR
 
     result = train(gold)
     if with_spark_mllib:

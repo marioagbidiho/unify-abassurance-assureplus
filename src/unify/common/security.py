@@ -15,8 +15,9 @@ import re
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-_EMAIL_IN_TEXT = re.compile(r"[\w.+\-]+@[\w\-]+\.[\w.]+")
-_PHONE_IN_TEXT = re.compile(r"(?:\+33|0)\s?[1-9](?:[\s.\-]?\d{2}){4}")
+# Quantificateurs possessifs (++) : pas de retour arrière -> temps linéaire (anti-ReDoS)
+_EMAIL_IN_TEXT = re.compile(r"[\w.+\-]++@[\w\-]++(?:\.[\w\-]++)++")
+_PHONE_IN_TEXT = re.compile(r"(?:\+33|0)\s?[1-9](?:[\s.\-]?+\d{2}){4}")
 _IBAN_IN_TEXT = re.compile(r"\bFR\d{2}(?:\s?\d{4}){5}\s?\d{3}\b", re.IGNORECASE)
 
 
