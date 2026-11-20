@@ -1,0 +1,68 @@
+name: CI - qualité, tests, SonarCloud
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "fix/**", "hotfix/**", "release/**"]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Analyse statique (ruff + bandit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install ruff bandit
+      - name: Ruff - style, bugs, complexité (C90), sécurité (S)
+        run: ruff check src tests app --output-format=github && ruff format --check src tests app
+      - name: Bandit - vulnérabilités (sévérité >= moyenne)
+        run: bandit -r src -ll -f txt
+
+  tests:
+    name: Tests unitaires + intégration Spark + couverture
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }            # historique complet requis par SonarCloud
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - uses: actions/setup-java@v4         # Spark 4 nécessite Java 17+
+        with: { distribution: temurin, java-version: "17" }
+      - name: Installation
+        run: pip install -e ".[spark,api,app,dev]"
+      - name: Tests + couverture (seuil bloquant 80 %)
+        run: >
+          pytest --cov --cov-report=xml --cov-report=term-missing --cov-report=html
+          --junitxml=reports/junit.xml
+      - name: Rapport de couverture
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            htmlcov/
+            reports/junit.xml
+      - name: Analyse SonarCloud (Quality Gate)
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker:
+    name: Construction de l'image de l'API
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t unify-api:${{ github.sha }} .
