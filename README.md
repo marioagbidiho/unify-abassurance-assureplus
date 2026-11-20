@@ -1,6 +1,6 @@
 # UNIFY · Plateforme Data & IA unifiée AbAssurance × AssurePlus
 
-[![CI](__GITHUB_URL__/actions/workflows/ci.yml/badge.svg)](__GITHUB_URL__/actions/workflows/ci.yml)
+[![CI](https://github.com/marioagbidiho/unify-abassurance-assureplus/actions/workflows/ci.yml/badge.svg)](https://github.com/marioagbidiho/unify-abassurance-assureplus/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue) ![Spark](https://img.shields.io/badge/Apache%20Spark-4.0-orange)
 ![Coverage](https://img.shields.io/badge/couverture-%E2%89%A5%2080%25-brightgreen)
 
@@ -9,14 +9,15 @@ Auteur : **AGBIDIHO Mario** – suite des Blocs 1 (spécification, DFD) et 2 (Sc
 
 | Description | Valeur |
 |---|---|
-| Dépôt Git (public) | __GITHUB_URL__ |
-| Application déployée | __APP_URL__ |
+| Dépôt Git (public) | https://github.com/marioagbidiho/unify-abassurance-assureplus |
+| Application déployée | https://unify-abassurance-assureplus.streamlit.app |
 | Compte **admin** | `admin` / `Admin#2026!` |
 | Compte **user** | `user` / `User#2026!` |
 | Branches permanentes | `main` (production) · `develop` (intégration) |
 | Convention de nommage | [docs/CONVENTION_BRANCHES.md](docs/CONVENTION_BRANCHES.md) |
-| Qualité de code | ruff · bandit · SonarCloud ([sonar-project.properties](sonar-project.properties)) |
-| Tests / couverture | `pytest --cov` – 146 tests, couverture ≈ 98 % (seuil bloquant 80 %) |
+| Qualité de code | ruff · bandit (CI) · SonarCloud : https://sonarcloud.io/project/overview?id=marioagbidiho_unify-abassurance-assureplus |
+| Intégration continue | https://github.com/marioagbidiho/unify-abassurance-assureplus/actions |
+| Tests / couverture | `pytest --cov` – 149 tests, couverture 97,9 % (seuil bloquant 80 %) |
 
 ## Ce que fait la solution
 
