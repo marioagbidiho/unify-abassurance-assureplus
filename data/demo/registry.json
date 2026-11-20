@@ -1,9 +1,9 @@
 [
   {
     "nom": "resiliation_logreg_v1.0",
-    "date": "2026-11-20 19:38:49",
-    "auc": 0.7973,
-    "lift": 4.03,
+    "date": "2026-11-20 19:59:45",
+    "auc": 0.789,
+    "lift": 4.13,
     "statut": "CHAMPION"
   }
 ]

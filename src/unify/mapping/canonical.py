@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import uuid
 from collections.abc import Callable, Iterable
 from datetime import UTC, datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
@@ -418,8 +417,8 @@ def _paiement(raw: dict, source: str, cols: dict[str, str], s: Settings) -> dict
     else:
         statut = "NON_RENSEIGNE"
     return {
-        # AP_PAYMENT_REF est déjà un GUID unique : on génère un UUID neuf pour les deux sources
-        "id_paiement_uni": str(uuid.uuid4()) if id_src else None,
+        # Clé déterministe (UUID v5) : un paiement rejoué garde la même clé -> idempotence
+        "id_paiement_uni": canonical_id("paiement", source, id_src) if id_src else None,
         "id_contrat_uni": _contrat_key(source, raw.get(cols["contrat"])),
         "id_paiement_source": id_src,
         "date_heure_paiement_utc": _checked_datetime_utc(
