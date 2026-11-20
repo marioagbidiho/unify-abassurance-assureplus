@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -25,7 +26,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     sub.add_parser("generate", help="Génère uniquement les bases sources simulées")
     api_p = sub.add_parser("api", help="Démarre l'API de prédiction (FastAPI)")
-    api_p.add_argument("--port", type=int, default=8000)
+    api_p.add_argument("--port", type=int, default=8000)  # hôte : variable UNIFY_API_HOST
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -46,8 +47,9 @@ def main(argv: list[str] | None = None) -> None:
     else:
         import uvicorn
 
-        # écoute sur toutes les interfaces : l'API tourne dans un conteneur, derrière la passerelle
-        uvicorn.run("unify.api.main:app", host="0.0.0.0", port=args.port)  # noqa: S104  # nosec B104
+        # Écoute locale par défaut ; le conteneur Docker fixe UNIFY_API_HOST explicitement.
+        host = os.environ.get("UNIFY_API_HOST", "127.0.0.1")
+        uvicorn.run("unify.api.main:app", host=host, port=args.port)
 
 
 if __name__ == "__main__":

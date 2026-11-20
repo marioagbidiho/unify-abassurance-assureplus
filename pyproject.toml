@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unify"
-version = "1.0.1"
+version = "1.1.0"
 description = "UNIFY - Plateforme Data & IA unifiée AbAssurance / AssurePlus (Bloc 3 BCD&IA)"
 readme = "README.md"
 authors = [{ name = "AGBIDIHO Mario" }]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
     "pandas>=2.1",
@@ -40,7 +40,7 @@ unify = ["../../config/*.yaml"]
 # ---------------------------------------------------------------- qualité
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -57,6 +57,7 @@ max-complexity = 10
 # ---------------------------------------------------------------- tests
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 addopts = "-ra --strict-markers"
 markers = [
     "spark: tests d'intégration qui démarrent une session Spark locale (plus lents)",

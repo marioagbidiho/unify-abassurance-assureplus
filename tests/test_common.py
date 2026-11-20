@@ -185,3 +185,13 @@ def test_redact_free_text():
     assert "[TEL]" in redacted and "[EMAIL]" in redacted and "[IBAN]" in redacted
     assert "06 12" not in redacted
     assert security.redact_free_text(None) is None
+
+
+def test_redaction_regex_is_linear_on_adversarial_input():
+    """Anti-ReDoS : une entrée hostile de 50 000 caractères est traitée instantanément."""
+    import time
+
+    hostile = "a" * 25_000 + "@" + "b." * 12_500
+    start = time.perf_counter()
+    security.redact_free_text(hostile)
+    assert time.perf_counter() - start < 1.0
