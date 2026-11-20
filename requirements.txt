@@ -1,0 +1,10 @@
+# Dépendances de l'application web déployée (Streamlit Community Cloud)
+# Le pipeline complet : pip install -e ".[spark,api,app,dev]"
+streamlit>=1.40
+altair>=5
+pandas>=2.1
+numpy>=1.26
+pyarrow>=14
+scikit-learn==1.9.1
+joblib>=1.3
+pyjwt>=2.8
