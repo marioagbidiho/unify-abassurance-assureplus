@@ -3,7 +3,7 @@
   "cas_usage": "Prédiction de la résiliation à 90 jours (MVP, EF-09)",
   "algorithme": "LogisticRegression",
   "version": "v1.0",
-  "date_entrainement_utc": "2026-11-20 19:38:49",
+  "date_entrainement_utc": "2026-11-20 19:59:45",
   "features": [
     "source_ap",
     "age",
@@ -31,7 +31,7 @@
     "anciennete_mois": 120.0,
     "nb_contrats_actifs": 2.0,
     "nb_produits_distincts": 1.0,
-    "prime_annuelle_totale": 1007.9200000000001,
+    "prime_annuelle_totale": 1010.7049999999999,
     "a_produit_auto": 0.0,
     "a_produit_habitation": 0.0,
     "a_produit_sante": 0.0,
@@ -40,7 +40,7 @@
     "nb_sinistres_refuses_12m": 0.0,
     "nb_paiements_12m": 11.0,
     "nb_paiements_rejetes_12m": 0.0,
-    "taux_paiement_12m": 0.9835,
+    "taux_paiement_12m": 0.966,
     "jours_depuis_dernier_paiement": 18.0,
     "score_fidelite": 60.0,
     "fidelite_renseignee": 0.0,
@@ -49,35 +49,46 @@
   "nb_apprentissage": 6070,
   "nb_test": 2024,
   "metriques_test": {
-    "auc": 0.7973,
-    "pr_auc": 0.3948,
-    "lift_decile_1": 4.03,
-    "precision_top10": 0.396,
-    "rappel_top10": 0.402,
-    "brier": 0.0736,
+    "auc": 0.789,
+    "pr_auc": 0.3774,
+    "lift_decile_1": 4.13,
+    "precision_top10": 0.4059,
+    "rappel_top10": 0.4121,
+    "brier": 0.0747,
     "taux_cible": 0.0983,
     "n": 2024
   },
   "comparaison": {
     "logreg": {
-      "auc": 0.7973,
-      "pr_auc": 0.3948,
-      "lift_decile_1": 4.03,
-      "precision_top10": 0.396,
-      "rappel_top10": 0.402,
-      "brier": 0.0736,
+      "auc": 0.789,
+      "pr_auc": 0.3774,
+      "lift_decile_1": 4.13,
+      "precision_top10": 0.4059,
+      "rappel_top10": 0.4121,
+      "brier": 0.0747,
       "taux_cible": 0.0983,
       "n": 2024
     },
     "hgb": {
-      "auc": 0.7899,
-      "pr_auc": 0.3654,
-      "lift_decile_1": 3.78,
-      "precision_top10": 0.3713,
-      "rappel_top10": 0.3769,
-      "brier": 0.0753,
+      "auc": 0.7794,
+      "pr_auc": 0.3391,
+      "lift_decile_1": 3.73,
+      "precision_top10": 0.3663,
+      "rappel_top10": 0.3719,
+      "brier": 0.0764,
       "taux_cible": 0.0983,
       "n": 2024
+    },
+    "spark_gbt": {
+      "auc": 0.7749,
+      "pr_auc": 0.3641,
+      "lift_decile_1": 3.79,
+      "precision_top10": 0.3858,
+      "rappel_top10": 0.3781,
+      "brier": 0.0788,
+      "taux_cible": 0.1018,
+      "n": 1974,
+      "algorithme": "Spark MLlib GBTClassifier"
     }
   },
   "seuils_acceptation": {
@@ -91,195 +102,195 @@
       "tpr": 0.0
     },
     {
-      "fpr": 0.0016,
-      "tpr": 0.0704
+      "fpr": 0.0022,
+      "tpr": 0.0804
     },
     {
-      "fpr": 0.0038,
-      "tpr": 0.1256
+      "fpr": 0.0104,
+      "tpr": 0.1658
     },
     {
-      "fpr": 0.006,
-      "tpr": 0.1608
-    },
-    {
-      "fpr": 0.0099,
-      "tpr": 0.191
-    },
-    {
-      "fpr": 0.0164,
-      "tpr": 0.2161
+      "fpr": 0.0148,
+      "tpr": 0.196
     },
     {
       "fpr": 0.0203,
-      "tpr": 0.2513
+      "tpr": 0.2161
     },
     {
-      "fpr": 0.0307,
-      "tpr": 0.2714
+      "fpr": 0.0225,
+      "tpr": 0.2312
     },
     {
-      "fpr": 0.0362,
-      "tpr": 0.2864
+      "fpr": 0.0285,
+      "tpr": 0.2613
     },
     {
-      "fpr": 0.0405,
-      "tpr": 0.3116
+      "fpr": 0.0356,
+      "tpr": 0.2814
     },
     {
-      "fpr": 0.046,
-      "tpr": 0.3266
+      "fpr": 0.0422,
+      "tpr": 0.2915
     },
     {
       "fpr": 0.051,
-      "tpr": 0.3467
+      "tpr": 0.3116
     },
     {
-      "fpr": 0.0532,
+      "fpr": 0.0526,
+      "tpr": 0.3367
+    },
+    {
+      "fpr": 0.0548,
       "tpr": 0.3618
     },
     {
-      "fpr": 0.0575,
-      "tpr": 0.3819
+      "fpr": 0.0559,
+      "tpr": 0.3769
     },
     {
-      "fpr": 0.0658,
-      "tpr": 0.397
+      "fpr": 0.0641,
+      "tpr": 0.407
     },
     {
-      "fpr": 0.0729,
-      "tpr": 0.4171
+      "fpr": 0.0679,
+      "tpr": 0.4221
     },
     {
-      "fpr": 0.0778,
-      "tpr": 0.4372
+      "fpr": 0.0767,
+      "tpr": 0.4422
     },
     {
-      "fpr": 0.0849,
+      "fpr": 0.0805,
       "tpr": 0.4523
     },
     {
-      "fpr": 0.097,
-      "tpr": 0.4724
+      "fpr": 0.0975,
+      "tpr": 0.4673
     },
     {
-      "fpr": 0.1041,
-      "tpr": 0.4874
+      "fpr": 0.1074,
+      "tpr": 0.4824
     },
     {
-      "fpr": 0.1162,
-      "tpr": 0.5025
+      "fpr": 0.1178,
+      "tpr": 0.4975
     },
     {
-      "fpr": 0.1359,
+      "fpr": 0.1348,
       "tpr": 0.5176
     },
     {
-      "fpr": 0.1512,
-      "tpr": 0.5327
+      "fpr": 0.1375,
+      "tpr": 0.5377
     },
     {
-      "fpr": 0.1638,
-      "tpr": 0.5477
+      "fpr": 0.1573,
+      "tpr": 0.5578
     },
     {
-      "fpr": 0.1671,
+      "fpr": 0.1693,
       "tpr": 0.5678
     },
     {
-      "fpr": 0.1748,
+      "fpr": 0.177,
       "tpr": 0.5879
     },
     {
-      "fpr": 0.1808,
-      "tpr": 0.603
+      "fpr": 0.1836,
+      "tpr": 0.608
     },
     {
-      "fpr": 0.1879,
-      "tpr": 0.6231
+      "fpr": 0.1918,
+      "tpr": 0.6281
     },
     {
-      "fpr": 0.206,
+      "fpr": 0.1934,
       "tpr": 0.6432
     },
     {
-      "fpr": 0.2126,
+      "fpr": 0.2066,
       "tpr": 0.6583
     },
     {
-      "fpr": 0.2203,
-      "tpr": 0.6834
+      "fpr": 0.2208,
+      "tpr": 0.6784
     },
     {
-      "fpr": 0.2307,
-      "tpr": 0.6985
+      "fpr": 0.2384,
+      "tpr": 0.6935
     },
     {
-      "fpr": 0.251,
-      "tpr": 0.7136
+      "fpr": 0.2597,
+      "tpr": 0.7085
     },
     {
-      "fpr": 0.2811,
-      "tpr": 0.7337
+      "fpr": 0.2805,
+      "tpr": 0.7236
     },
     {
-      "fpr": 0.297,
+      "fpr": 0.2964,
+      "tpr": 0.7387
+    },
+    {
+      "fpr": 0.3085,
       "tpr": 0.7538
     },
     {
-      "fpr": 0.3052,
-      "tpr": 0.7688
+      "fpr": 0.3184,
+      "tpr": 0.7739
     },
     {
-      "fpr": 0.3326,
+      "fpr": 0.3485,
       "tpr": 0.7889
     },
     {
-      "fpr": 0.3474,
+      "fpr": 0.3841,
       "tpr": 0.804
     },
     {
-      "fpr": 0.3814,
-      "tpr": 0.8191
+      "fpr": 0.3973,
+      "tpr": 0.8141
     },
     {
-      "fpr": 0.4334,
-      "tpr": 0.8392
+      "fpr": 0.457,
+      "tpr": 0.8291
     },
     {
-      "fpr": 0.4844,
-      "tpr": 0.8543
+      "fpr": 0.5293,
+      "tpr": 0.8442
     },
     {
-      "fpr": 0.5184,
-      "tpr": 0.8693
+      "fpr": 0.5677,
+      "tpr": 0.8593
     },
     {
-      "fpr": 0.5852,
-      "tpr": 0.8844
+      "fpr": 0.5874,
+      "tpr": 0.8744
     },
     {
-      "fpr": 0.6126,
+      "fpr": 0.6153,
       "tpr": 0.8995
     },
     {
-      "fpr": 0.6301,
-      "tpr": 0.9196
+      "fpr": 0.6296,
+      "tpr": 0.9246
     },
     {
-      "fpr": 0.6603,
+      "fpr": 0.703,
       "tpr": 0.9397
     },
     {
-      "fpr": 0.7381,
+      "fpr": 0.7693,
       "tpr": 0.9548
     },
     {
-      "fpr": 0.7649,
+      "fpr": 0.7879,
       "tpr": 0.9698
     },
     {
-      "fpr": 0.8822,
+      "fpr": 0.8641,
       "tpr": 0.9849
     },
     {
@@ -291,47 +302,47 @@
     "par_source": [
       {
         "groupe": "AB",
-        "n": 1415,
-        "taux_cible": 0.0813,
-        "taux_cible_predit_top10": 0.065,
-        "auc": 0.7578
+        "n": 1399,
+        "taux_cible": 0.0772,
+        "taux_cible_predit_top10": 0.0701,
+        "auc": 0.7479
       },
       {
         "groupe": "AP",
-        "n": 609,
-        "taux_cible": 0.1379,
-        "taux_cible_predit_top10": 0.1823,
-        "auc": 0.8377
+        "n": 625,
+        "taux_cible": 0.1456,
+        "taux_cible_predit_top10": 0.168,
+        "auc": 0.8142
       }
     ],
     "par_tranche_age": [
       {
         "groupe": "<30",
-        "n": 350,
-        "taux_cible": 0.14,
-        "taux_cible_predit_top10": 0.1457,
-        "auc": 0.8422
+        "n": 332,
+        "taux_cible": 0.1446,
+        "taux_cible_predit_top10": 0.1536,
+        "auc": 0.8538
       },
       {
         "groupe": "30-44",
-        "n": 463,
-        "taux_cible": 0.0972,
-        "taux_cible_predit_top10": 0.1274,
-        "auc": 0.7992
+        "n": 470,
+        "taux_cible": 0.0872,
+        "taux_cible_predit_top10": 0.1213,
+        "auc": 0.8001
       },
       {
         "groupe": "45-59",
-        "n": 445,
-        "taux_cible": 0.0921,
-        "taux_cible_predit_top10": 0.1034,
-        "auc": 0.7377
+        "n": 468,
+        "taux_cible": 0.0919,
+        "taux_cible_predit_top10": 0.0983,
+        "auc": 0.746
       },
       {
         "groupe": "60+",
-        "n": 766,
-        "taux_cible": 0.0836,
-        "taux_cible_predit_top10": 0.0614,
-        "auc": 0.7948
+        "n": 754,
+        "taux_cible": 0.0889,
+        "taux_cible_predit_top10": 0.065,
+        "auc": 0.7695
       }
     ]
   },

@@ -1,5 +1,5 @@
 {
-  "date_execution_utc": "2026-11-20 19:34:28",
+  "date_execution_utc": "2026-11-20 19:55:21",
   "sources": {
     "AB_CLIENT": 6000,
     "AB_CONTRAT": 10025,
@@ -159,9 +159,9 @@
     "paiement": {
       "entite": "paiement",
       "nb_lignes_lues": 196331,
-      "nb_doublons_supprimes": 0,
-      "nb_lignes_valides": 195184,
-      "nb_lignes_quarantaine": 1147,
+      "nb_doublons_supprimes": 393,
+      "nb_lignes_valides": 194793,
+      "nb_lignes_quarantaine": 1145,
       "taux_conformite": 0.9942,
       "regles": {
         "CLE_ABSENTE": {
@@ -182,12 +182,12 @@
         "MONTANT_NON_POSITIF": {
           "severite": "CRITIQUE",
           "description": "Montant payé <= 0 ou absent",
-          "nb_lignes": 105
+          "nb_lignes": 104
         },
         "INTEGRITE_REFERENTIELLE": {
           "severite": "CRITIQUE",
           "description": "id_contrat_uni inexistant",
-          "nb_lignes": 1042
+          "nb_lignes": 1041
         }
       }
     }
@@ -204,13 +204,9 @@
         "nb_personnes": 7965,
         "nb_comptes": 7965
       },
-      "R3_PROBABILISTE": {
-        "nb_personnes": 46,
-        "nb_comptes": 92
-      },
       "R2_IDENTITE": {
-        "nb_personnes": 1,
-        "nb_comptes": 2
+        "nb_personnes": 47,
+        "nb_comptes": 94
       }
     },
     "nb_doublons_inter_societes": 250
@@ -223,15 +219,15 @@
   },
   "modele": {
     "champion": "resiliation_logreg_v1.0",
-    "auc": 0.7973,
-    "pr_auc": 0.3948,
-    "lift_decile_1": 4.03,
-    "precision_top10": 0.396,
-    "rappel_top10": 0.402,
-    "brier": 0.0736,
+    "auc": 0.789,
+    "pr_auc": 0.3774,
+    "lift_decile_1": 4.13,
+    "precision_top10": 0.4059,
+    "rappel_top10": 0.4121,
+    "brier": 0.0747,
     "taux_cible": 0.0983,
     "n": 2024,
     "accepte": true
   },
-  "duree_secondes": 261.3
+  "duree_secondes": 280.7
 }

@@ -16,7 +16,7 @@ Auteur : **AGBIDIHO Mario** – suite des Blocs 1 (spécification, DFD) et 2 (Sc
 | Branches permanentes | `main` (production) · `develop` (intégration) |
 | Convention de nommage | [docs/CONVENTION_BRANCHES.md](docs/CONVENTION_BRANCHES.md) |
 | Qualité de code | ruff · bandit · SonarCloud ([sonar-project.properties](sonar-project.properties)) |
-| Tests / couverture | `pytest --cov` – 140 tests, couverture ≈ 98 % (seuil bloquant 80 %) |
+| Tests / couverture | `pytest --cov` – 146 tests, couverture ≈ 98 % (seuil bloquant 80 %) |
 
 ## Ce que fait la solution
 
