@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unify"
-version = "1.0.1"
+version = "1.1.0"
 description = "UNIFY - Plateforme Data & IA unifiée AbAssurance / AssurePlus (Bloc 3 BCD&IA)"
 readme = "README.md"
 authors = [{ name = "AGBIDIHO Mario" }]
