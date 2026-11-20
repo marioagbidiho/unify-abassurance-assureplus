@@ -1,0 +1,22 @@
+digraph P {
+  graph [rankdir=LR, fontname="DejaVu Sans", nodesep=0.35, ranksep=0.45, pad=0.3, bgcolor=white,
+         label=<<B>Data pipeline UNIFY réalisé (Bloc 3)</B><BR/><FONT POINT-SIZE="10">module Python unify · chaque boîte = un module testé · trait plein = exécuté en CI · tirets = équivalent production</FONT>>, labelloc=t, fontsize=16];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=10, fillcolor="#eef3f9", color="#2e6fae"];
+  edge [fontname="DejaVu Sans", fontsize=9, color="#555555"];
+  ab [label="BDD X Oracle\nAB_CLIENT · AB_CONTRAT\nAB_SINISTRE · AB_PAIEMENT", fillcolor="#fbe3d6", color="#c55a11"];
+  ap [label="BDD Y SQL Server\nAP_USERS · AP_CONTRACTS\nAP_CLAIMS · AP_PAYMENTS", fillcolor="#deebf7", color="#2e75b6"];
+  p1 [label="P1 Extraction\nTalend (init) / Debezium (CDC)\nunify.ingestion.extract", fillcolor="#e2efda", color="#548235"];
+  p2 [label="P2 Apache Kafka\ntopics {env}.{src}.raw.{entité}.v1\nunify.transport.bus", fillcolor="#fff2cc", color="#bf9000"];
+  br [label="BRONZE\n/data/bronze/{src}/{entité}/\ndate_ingestion=…\n(brut, immuable)", shape=cylinder, fillcolor="#dae3f3"];
+  p34 [label="P3/P4 Spark\nmapping canonique (mapInPandas)\n+ qualité + dédoublonnage\nspark_jobs.bronze_to_silver", fillcolor="#e2efda", color="#548235"];
+  q [label="QUARANTAINE\nrejets + motif", shape=cylinder, fillcolor="#fde9e9", color="#c00000"];
+  sv [label="SILVER\nuni_client · uni_contrat\nuni_sinistre · uni_paiement", shape=cylinder, fillcolor="#dae3f3"];
+  p5 [label="P5 MDM Spark\nblocking date de naissance\nR1 / R2 / R3 Jaro-Winkler", fillcolor="#e2efda", color="#548235"];
+  mdm [label="mdm_personne", shape=cylinder, fillcolor="#dae3f3"];
+  p6 [label="P6 Features Spark\ngold.ft_client_resiliation\n19 features + cible 90 j", fillcolor="#e4dfec", color="#7030a0"];
+  p7 [label="P7 Entraînement\nscikit-learn (logreg, HGB)\n+ Spark MLlib GBT\nmodel card + registre", fillcolor="#e4dfec", color="#7030a0"];
+  p8 [label="P8 API FastAPI (JWT)\n/v1/resiliation/...\n+ journal des prédictions", fillcolor="#e4dfec", color="#7030a0"];
+  p9 [label="P9 Application web\nStreamlit (admin / user)\nqualité · modèle · scores", fillcolor="#ededed", color="#404040"];
+  ab -> p1; ap -> p1; p1 -> p2 [label="enveloppes CDC"]; p2 -> br; br -> p34; p34 -> sv; p34 -> q [color="#c00000"];
+  sv -> p5 -> mdm; sv -> p6; mdm -> p6; p6 -> p7 -> p8 -> p9; p6 -> p9 [style=dashed, label="scores"];
+}
