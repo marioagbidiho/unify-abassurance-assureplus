@@ -61,7 +61,7 @@ def build_features(
 
     contrat_client = contrats.select("id_contrat_uni", "id_client_uni")
     sin_12m = (
-        sinistres.join(contrat_client, "id_contrat_uni")
+        sinistres.join(contrat_client, "id_contrat_uni", "inner")
         .filter(
             (F.col("date_heure_sinistre_utc") >= t_start_12m)
             & (F.col("date_heure_sinistre_utc") < t_end)
@@ -76,7 +76,7 @@ def build_features(
         )
     )
 
-    pay = paiements.join(contrat_client, "id_contrat_uni").filter(
+    pay = paiements.join(contrat_client, "id_contrat_uni", "inner").filter(
         F.col("date_heure_paiement_utc") < t_end
     )
     pay_12m = (
@@ -99,7 +99,7 @@ def build_features(
     )
 
     base = (
-        clients.join(portefeuille, "id_client_uni")
+        clients.join(portefeuille, "id_client_uni", "inner")
         .join(personnes.select("id_personne_mdm", "nb_comptes_lies"), "id_personne_mdm", "left")
         .join(sin_12m, "id_client_uni", "left")
         .join(pay_12m, "id_client_uni", "left")
@@ -108,20 +108,22 @@ def build_features(
     )
 
     return (
-        base.withColumn("date_observation", t)
-        .withColumn("source_ap", (F.col("source_systeme") == "AP").cast("int"))
-        .withColumn("age", F.floor(F.months_between(t, F.col("date_naissance")) / 12).cast("int"))
-        .withColumn(
-            "anciennete_mois", F.floor(F.months_between(t, F.col("date_creation_utc"))).cast("int")
+        base.withColumns(
+            {
+                "date_observation": t,
+                "source_ap": (F.col("source_systeme") == "AP").cast("int"),
+                "age": F.floor(F.months_between(t, F.col("date_naissance")) / 12).cast("int"),
+                "anciennete_mois": F.floor(F.months_between(t, F.col("date_creation_utc"))).cast(
+                    "int"
+                ),
+                "taux_paiement_12m": F.round(
+                    F.coalesce(F.col("_montant_paye_12m"), F.lit(0.0))
+                    / F.col("prime_annuelle_totale"),
+                    3,
+                ),
+                "fidelite_renseignee": F.col("score_fidelite").isNotNull().cast("int"),
+            }
         )
-        .withColumn(
-            "taux_paiement_12m",
-            F.round(
-                F.coalesce(F.col("_montant_paye_12m"), F.lit(0.0)) / F.col("prime_annuelle_totale"),
-                3,
-            ),
-        )
-        .withColumn("fidelite_renseignee", F.col("score_fidelite").isNotNull().cast("int"))
         .fillna(
             0,
             subset=[

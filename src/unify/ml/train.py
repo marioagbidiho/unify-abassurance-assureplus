@@ -13,6 +13,8 @@ Le meilleur modèle (AUC test) devient « champion » s'il respecte les seuils d
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -27,6 +29,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
+from unify.config import PROJECT_ROOT
 from unify.ml.evaluate import evaluate, fairness_by_group, roc_points
 from unify.ml.features import FEATURES, FORBIDDEN_FEATURES, TARGET
 
@@ -122,15 +125,45 @@ def train(gold: pd.DataFrame, features: list[str] | None = None) -> TrainingResu
     return TrainingResult(champion, model, results[champion], card)
 
 
+_REGISTRY_KEYS = ("nom", "date", "auc", "lift", "statut")
+
+
+def _safe_output_dir(out_dir: Path) -> Path:
+    """Répertoire de sortie canonique, refusé s'il sort des racines autorisées."""
+    resolved = Path(out_dir).resolve()
+    allowed = [PROJECT_ROOT.resolve(), Path(tempfile.gettempdir()).resolve()]
+    extra = os.environ.get("UNIFY_ARTIFACTS")
+    if extra:
+        allowed.append(Path(extra).resolve())
+    if not any(resolved == root or root in resolved.parents for root in allowed):
+        raise ValueError(f"Répertoire d'artefacts non autorisé : {resolved}")
+    return resolved
+
+
+def _read_registry(path: Path) -> list[dict]:
+    """Relit le registre en ne gardant que des entrées bien formées (contenu non fiable)."""
+    if not path.exists():
+        return []
+    entries = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(entries, list):
+        return []
+    return [
+        {k: e[k] for k in _REGISTRY_KEYS}
+        for e in entries
+        if isinstance(e, dict) and set(_REGISTRY_KEYS) <= set(e)
+    ]
+
+
 def save(result: TrainingResult, out_dir: Path) -> Path:
     """Sérialise le modèle champion, sa fiche et met à jour le registre des modèles."""
+    out_dir = _safe_output_dir(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(result.model, out_dir / "model.joblib")
     (out_dir / "model_card.json").write_text(
         json.dumps(result.card, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     registry_path = out_dir / "registry.json"
-    registry = json.loads(registry_path.read_text()) if registry_path.exists() else []
+    registry = _read_registry(registry_path)
     registry = [r for r in registry if r["nom"] != result.card["nom"]]
     registry.append(
         {
