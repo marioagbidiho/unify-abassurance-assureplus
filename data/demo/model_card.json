@@ -1,0 +1,343 @@
+{
+  "nom": "resiliation_logreg_v1.0",
+  "cas_usage": "Prédiction de la résiliation à 90 jours (MVP, EF-09)",
+  "algorithme": "LogisticRegression",
+  "version": "v1.0",
+  "date_entrainement_utc": "2026-11-20 19:38:49",
+  "features": [
+    "source_ap",
+    "age",
+    "anciennete_mois",
+    "nb_contrats_actifs",
+    "nb_produits_distincts",
+    "prime_annuelle_totale",
+    "a_produit_auto",
+    "a_produit_habitation",
+    "a_produit_sante",
+    "nb_sinistres_12m",
+    "montant_sinistres_12m",
+    "nb_sinistres_refuses_12m",
+    "nb_paiements_12m",
+    "nb_paiements_rejetes_12m",
+    "taux_paiement_12m",
+    "jours_depuis_dernier_paiement",
+    "score_fidelite",
+    "fidelite_renseignee",
+    "nb_comptes_lies"
+  ],
+  "reference_explication": {
+    "source_ap": 0.0,
+    "age": 52.0,
+    "anciennete_mois": 120.0,
+    "nb_contrats_actifs": 2.0,
+    "nb_produits_distincts": 1.0,
+    "prime_annuelle_totale": 1007.9200000000001,
+    "a_produit_auto": 0.0,
+    "a_produit_habitation": 0.0,
+    "a_produit_sante": 0.0,
+    "nb_sinistres_12m": 0.0,
+    "montant_sinistres_12m": 0.0,
+    "nb_sinistres_refuses_12m": 0.0,
+    "nb_paiements_12m": 11.0,
+    "nb_paiements_rejetes_12m": 0.0,
+    "taux_paiement_12m": 0.9835,
+    "jours_depuis_dernier_paiement": 18.0,
+    "score_fidelite": 60.0,
+    "fidelite_renseignee": 0.0,
+    "nb_comptes_lies": 1.0
+  },
+  "nb_apprentissage": 6070,
+  "nb_test": 2024,
+  "metriques_test": {
+    "auc": 0.7973,
+    "pr_auc": 0.3948,
+    "lift_decile_1": 4.03,
+    "precision_top10": 0.396,
+    "rappel_top10": 0.402,
+    "brier": 0.0736,
+    "taux_cible": 0.0983,
+    "n": 2024
+  },
+  "comparaison": {
+    "logreg": {
+      "auc": 0.7973,
+      "pr_auc": 0.3948,
+      "lift_decile_1": 4.03,
+      "precision_top10": 0.396,
+      "rappel_top10": 0.402,
+      "brier": 0.0736,
+      "taux_cible": 0.0983,
+      "n": 2024
+    },
+    "hgb": {
+      "auc": 0.7899,
+      "pr_auc": 0.3654,
+      "lift_decile_1": 3.78,
+      "precision_top10": 0.3713,
+      "rappel_top10": 0.3769,
+      "brier": 0.0753,
+      "taux_cible": 0.0983,
+      "n": 2024
+    }
+  },
+  "seuils_acceptation": {
+    "auc": 0.75,
+    "lift_decile_1": 3.0
+  },
+  "accepte": true,
+  "courbe_roc": [
+    {
+      "fpr": 0.0,
+      "tpr": 0.0
+    },
+    {
+      "fpr": 0.0016,
+      "tpr": 0.0704
+    },
+    {
+      "fpr": 0.0038,
+      "tpr": 0.1256
+    },
+    {
+      "fpr": 0.006,
+      "tpr": 0.1608
+    },
+    {
+      "fpr": 0.0099,
+      "tpr": 0.191
+    },
+    {
+      "fpr": 0.0164,
+      "tpr": 0.2161
+    },
+    {
+      "fpr": 0.0203,
+      "tpr": 0.2513
+    },
+    {
+      "fpr": 0.0307,
+      "tpr": 0.2714
+    },
+    {
+      "fpr": 0.0362,
+      "tpr": 0.2864
+    },
+    {
+      "fpr": 0.0405,
+      "tpr": 0.3116
+    },
+    {
+      "fpr": 0.046,
+      "tpr": 0.3266
+    },
+    {
+      "fpr": 0.051,
+      "tpr": 0.3467
+    },
+    {
+      "fpr": 0.0532,
+      "tpr": 0.3618
+    },
+    {
+      "fpr": 0.0575,
+      "tpr": 0.3819
+    },
+    {
+      "fpr": 0.0658,
+      "tpr": 0.397
+    },
+    {
+      "fpr": 0.0729,
+      "tpr": 0.4171
+    },
+    {
+      "fpr": 0.0778,
+      "tpr": 0.4372
+    },
+    {
+      "fpr": 0.0849,
+      "tpr": 0.4523
+    },
+    {
+      "fpr": 0.097,
+      "tpr": 0.4724
+    },
+    {
+      "fpr": 0.1041,
+      "tpr": 0.4874
+    },
+    {
+      "fpr": 0.1162,
+      "tpr": 0.5025
+    },
+    {
+      "fpr": 0.1359,
+      "tpr": 0.5176
+    },
+    {
+      "fpr": 0.1512,
+      "tpr": 0.5327
+    },
+    {
+      "fpr": 0.1638,
+      "tpr": 0.5477
+    },
+    {
+      "fpr": 0.1671,
+      "tpr": 0.5678
+    },
+    {
+      "fpr": 0.1748,
+      "tpr": 0.5879
+    },
+    {
+      "fpr": 0.1808,
+      "tpr": 0.603
+    },
+    {
+      "fpr": 0.1879,
+      "tpr": 0.6231
+    },
+    {
+      "fpr": 0.206,
+      "tpr": 0.6432
+    },
+    {
+      "fpr": 0.2126,
+      "tpr": 0.6583
+    },
+    {
+      "fpr": 0.2203,
+      "tpr": 0.6834
+    },
+    {
+      "fpr": 0.2307,
+      "tpr": 0.6985
+    },
+    {
+      "fpr": 0.251,
+      "tpr": 0.7136
+    },
+    {
+      "fpr": 0.2811,
+      "tpr": 0.7337
+    },
+    {
+      "fpr": 0.297,
+      "tpr": 0.7538
+    },
+    {
+      "fpr": 0.3052,
+      "tpr": 0.7688
+    },
+    {
+      "fpr": 0.3326,
+      "tpr": 0.7889
+    },
+    {
+      "fpr": 0.3474,
+      "tpr": 0.804
+    },
+    {
+      "fpr": 0.3814,
+      "tpr": 0.8191
+    },
+    {
+      "fpr": 0.4334,
+      "tpr": 0.8392
+    },
+    {
+      "fpr": 0.4844,
+      "tpr": 0.8543
+    },
+    {
+      "fpr": 0.5184,
+      "tpr": 0.8693
+    },
+    {
+      "fpr": 0.5852,
+      "tpr": 0.8844
+    },
+    {
+      "fpr": 0.6126,
+      "tpr": 0.8995
+    },
+    {
+      "fpr": 0.6301,
+      "tpr": 0.9196
+    },
+    {
+      "fpr": 0.6603,
+      "tpr": 0.9397
+    },
+    {
+      "fpr": 0.7381,
+      "tpr": 0.9548
+    },
+    {
+      "fpr": 0.7649,
+      "tpr": 0.9698
+    },
+    {
+      "fpr": 0.8822,
+      "tpr": 0.9849
+    },
+    {
+      "fpr": 1.0,
+      "tpr": 1.0
+    }
+  ],
+  "equite": {
+    "par_source": [
+      {
+        "groupe": "AB",
+        "n": 1415,
+        "taux_cible": 0.0813,
+        "taux_cible_predit_top10": 0.065,
+        "auc": 0.7578
+      },
+      {
+        "groupe": "AP",
+        "n": 609,
+        "taux_cible": 0.1379,
+        "taux_cible_predit_top10": 0.1823,
+        "auc": 0.8377
+      }
+    ],
+    "par_tranche_age": [
+      {
+        "groupe": "<30",
+        "n": 350,
+        "taux_cible": 0.14,
+        "taux_cible_predit_top10": 0.1457,
+        "auc": 0.8422
+      },
+      {
+        "groupe": "30-44",
+        "n": 463,
+        "taux_cible": 0.0972,
+        "taux_cible_predit_top10": 0.1274,
+        "auc": 0.7992
+      },
+      {
+        "groupe": "45-59",
+        "n": 445,
+        "taux_cible": 0.0921,
+        "taux_cible_predit_top10": 0.1034,
+        "auc": 0.7377
+      },
+      {
+        "groupe": "60+",
+        "n": 766,
+        "taux_cible": 0.0836,
+        "taux_cible_predit_top10": 0.0614,
+        "auc": 0.7948
+      }
+    ]
+  },
+  "limites": [
+    "Données synthétiques (échelle 1/2 000) : à ré-entraîner sur les données réelles.",
+    "Validation par découpage aléatoire stratifié ; validation hors période à prévoir.",
+    "Score d'aide à la décision : aucune décision automatique défavorable (RGPD art. 22)."
+  ]
+}
