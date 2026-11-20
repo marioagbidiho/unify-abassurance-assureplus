@@ -17,7 +17,7 @@ Auteur : **AGBIDIHO Mario** – suite des Blocs 1 (spécification, DFD) et 2 (Sc
 | Convention de nommage | [docs/CONVENTION_BRANCHES.md](docs/CONVENTION_BRANCHES.md) |
 | Qualité de code | ruff · bandit (CI) · SonarCloud : https://sonarcloud.io/project/overview?id=marioagbidiho_unify-abassurance-assureplus |
 | Intégration continue | https://github.com/marioagbidiho/unify-abassurance-assureplus/actions |
-| Tests / couverture | `pytest --cov` – 152 tests, couverture 97,8 % (seuil bloquant 80 %) |
+| Tests / couverture | `pytest --cov` – 162 tests, couverture 97,8 % (seuil bloquant 80 %) |
 
 ## Ce que fait la solution
 
