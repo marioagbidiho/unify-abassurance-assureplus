@@ -7,4 +7,4 @@ Chaîne implémentée (cf. DFD niveau 1 du Bloc 1) :
     BDD Y MSSQL ──┘   → P5 MDM → P6 features → P7 modèle → P8 API de prédiction
 """
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
