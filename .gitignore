@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Tests / qualité
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+reports/
+.scannerwork/
+
+# Données : jamais de données sources ni de lac sur Git (RGPD)
+/lake/
+/data/sources/
+data/demo/journal_predictions.jsonl
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Secrets
+.env
+.streamlit/secrets.toml
