@@ -1,0 +1,237 @@
+{
+  "date_execution_utc": "2026-11-20 19:34:28",
+  "sources": {
+    "AB_CLIENT": 6000,
+    "AB_CONTRAT": 10025,
+    "AB_SINISTRE": 3628,
+    "AB_PAIEMENT": 102554,
+    "AP_USERS": 2500,
+    "AP_CONTRACTS": 4183,
+    "AP_CLAIMS": 1438,
+    "AP_PAYMENTS": 93777
+  },
+  "kafka": {
+    "dev.ab.raw.client.v1": 6000,
+    "dev.ab.raw.contrat.v1": 10025,
+    "dev.ab.raw.sinistre.v1": 3628,
+    "dev.ab.raw.paiement.v1": 102554,
+    "dev.ap.raw.client.v1": 2500,
+    "dev.ap.raw.contrat.v1": 4183,
+    "dev.ap.raw.sinistre.v1": 1438,
+    "dev.ap.raw.paiement.v1": 93777
+  },
+  "bronze": {
+    "AB/client": 6000,
+    "AB/contrat": 10025,
+    "AB/sinistre": 3628,
+    "AB/paiement": 102554,
+    "AP/client": 2500,
+    "AP/contrat": 4183,
+    "AP/sinistre": 1438,
+    "AP/paiement": 93777
+  },
+  "qualite": {
+    "client": {
+      "entite": "client",
+      "nb_lignes_lues": 8500,
+      "nb_doublons_supprimes": 0,
+      "nb_lignes_valides": 8465,
+      "nb_lignes_quarantaine": 35,
+      "taux_conformite": 0.9959,
+      "regles": {
+        "CLE_ABSENTE": {
+          "severite": "CRITIQUE",
+          "description": "id_client_uni non calculable (id source vide)",
+          "nb_lignes": 0
+        },
+        "REF_INCONNU": {
+          "severite": "CRITIQUE",
+          "description": "Code absent des référentiels ref_*",
+          "nb_lignes": 0
+        },
+        "NOM_ABSENT": {
+          "severite": "CRITIQUE",
+          "description": "Nom du client vide",
+          "nb_lignes": 0
+        },
+        "DATE_NAISSANCE_INVALIDE": {
+          "severite": "CRITIQUE",
+          "description": "Date de naissance non convertible",
+          "nb_lignes": 19
+        },
+        "AGE_INVRAISEMBLABLE": {
+          "severite": "CRITIQUE",
+          "description": "Né avant 1900 ou âgé de moins de 16 ans",
+          "nb_lignes": 16
+        },
+        "EMAIL_INVALIDE": {
+          "severite": "AVERTISSEMENT",
+          "description": "E-mail au format invalide (mis à NULL)",
+          "nb_lignes": 61
+        },
+        "TELEPHONE_INVALIDE": {
+          "severite": "AVERTISSEMENT",
+          "description": "Téléphone non normalisable en E.164",
+          "nb_lignes": 0
+        }
+      }
+    },
+    "contrat": {
+      "entite": "contrat",
+      "nb_lignes_lues": 14208,
+      "nb_doublons_supprimes": 0,
+      "nb_lignes_valides": 14104,
+      "nb_lignes_quarantaine": 104,
+      "taux_conformite": 0.9927,
+      "regles": {
+        "CLE_ABSENTE": {
+          "severite": "CRITIQUE",
+          "description": "id_contrat_uni non calculable (id source vide)",
+          "nb_lignes": 0
+        },
+        "REF_INCONNU": {
+          "severite": "CRITIQUE",
+          "description": "Code absent des référentiels ref_*",
+          "nb_lignes": 0
+        },
+        "CLIENT_ABSENT": {
+          "severite": "CRITIQUE",
+          "description": "Contrat sans client",
+          "nb_lignes": 0
+        },
+        "DATE_DEBUT_INVALIDE": {
+          "severite": "CRITIQUE",
+          "description": "Date de début absente ou invalide",
+          "nb_lignes": 0
+        },
+        "PERIODE_INCOHERENTE": {
+          "severite": "CRITIQUE",
+          "description": "date_fin antérieure à date_debut",
+          "nb_lignes": 46
+        },
+        "PRIME_INVALIDE": {
+          "severite": "CRITIQUE",
+          "description": "Prime absente ou <= 0",
+          "nb_lignes": 0
+        },
+        "INTEGRITE_REFERENTIELLE": {
+          "severite": "CRITIQUE",
+          "description": "id_client_uni inexistant",
+          "nb_lignes": 58
+        }
+      }
+    },
+    "sinistre": {
+      "entite": "sinistre",
+      "nb_lignes_lues": 5066,
+      "nb_doublons_supprimes": 0,
+      "nb_lignes_valides": 5013,
+      "nb_lignes_quarantaine": 53,
+      "taux_conformite": 0.9895,
+      "regles": {
+        "CLE_ABSENTE": {
+          "severite": "CRITIQUE",
+          "description": "id_sinistre_uni non calculable (id source vide)",
+          "nb_lignes": 0
+        },
+        "REF_INCONNU": {
+          "severite": "AVERTISSEMENT",
+          "description": "Code absent des référentiels ref_*",
+          "nb_lignes": 0
+        },
+        "DATE_SINISTRE_INVALIDE": {
+          "severite": "CRITIQUE",
+          "description": "Date de sinistre non convertible",
+          "nb_lignes": 13
+        },
+        "MONTANT_NEGATIF": {
+          "severite": "CRITIQUE",
+          "description": "Montant estimé négatif",
+          "nb_lignes": 0
+        },
+        "INTEGRITE_REFERENTIELLE": {
+          "severite": "CRITIQUE",
+          "description": "id_contrat_uni inexistant",
+          "nb_lignes": 40
+        }
+      }
+    },
+    "paiement": {
+      "entite": "paiement",
+      "nb_lignes_lues": 196331,
+      "nb_doublons_supprimes": 0,
+      "nb_lignes_valides": 195184,
+      "nb_lignes_quarantaine": 1147,
+      "taux_conformite": 0.9942,
+      "regles": {
+        "CLE_ABSENTE": {
+          "severite": "CRITIQUE",
+          "description": "id_paiement_uni non calculable (id source vide)",
+          "nb_lignes": 0
+        },
+        "REF_INCONNU": {
+          "severite": "AVERTISSEMENT",
+          "description": "Code absent des référentiels ref_*",
+          "nb_lignes": 0
+        },
+        "DATE_PAIEMENT_INVALIDE": {
+          "severite": "CRITIQUE",
+          "description": "Date de paiement non convertible",
+          "nb_lignes": 0
+        },
+        "MONTANT_NON_POSITIF": {
+          "severite": "CRITIQUE",
+          "description": "Montant payé <= 0 ou absent",
+          "nb_lignes": 105
+        },
+        "INTEGRITE_REFERENTIELLE": {
+          "severite": "CRITIQUE",
+          "description": "id_contrat_uni inexistant",
+          "nb_lignes": 1042
+        }
+      }
+    }
+  },
+  "mdm": {
+    "nb_clients": 8465,
+    "nb_personnes": 8215,
+    "par_regle": {
+      "R1_EMAIL_DDN": {
+        "nb_personnes": 203,
+        "nb_comptes": 406
+      },
+      "UNIQUE": {
+        "nb_personnes": 7965,
+        "nb_comptes": 7965
+      },
+      "R3_PROBABILISTE": {
+        "nb_personnes": 46,
+        "nb_comptes": 92
+      },
+      "R2_IDENTITE": {
+        "nb_personnes": 1,
+        "nb_comptes": 2
+      }
+    },
+    "nb_doublons_inter_societes": 250
+  },
+  "gold": {
+    "nb_clients_observes": 8094,
+    "taux_resiliation_90j": 0.0983,
+    "date_observation": "2026-06-30",
+    "horizon_jours": 90
+  },
+  "modele": {
+    "champion": "resiliation_logreg_v1.0",
+    "auc": 0.7973,
+    "pr_auc": 0.3948,
+    "lift_decile_1": 4.03,
+    "precision_top10": 0.396,
+    "rappel_top10": 0.402,
+    "brier": 0.0736,
+    "taux_cible": 0.0983,
+    "n": 2024,
+    "accepte": true
+  },
+  "duree_secondes": 261.3
+}
