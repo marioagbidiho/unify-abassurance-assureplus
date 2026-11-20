@@ -1,0 +1,127 @@
+// MCD (Merise) de la base finale unifiée UNIFY - AbAssurance (Oracle) x AssurePlus (SQL Server)
+// Rendu : dot -Tpng -Gdpi=170 docs/mcd/mcd_unify.dot -o docs/img/mcd_unify.png
+graph MCD {
+  graph [layout=neato, overlap=false, splines=true, sep="+18", fontname="DejaVu Sans",
+         label=<<B>MCD - Base de données finale unifiée (projet UNIFY)</B><BR/><FONT POINT-SIZE="11">Notation Merise · identifiants soulignés · cardinalités (min,max) · fusion des schémas AB_* (Oracle) et AP_* (SQL Server)</FONT>>,
+         labelloc=t, fontsize=18, pad=0.4, bgcolor=white];
+  node  [fontname="DejaVu Sans", fontsize=10];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#555555", fontcolor="#b03a2e"];
+
+  // ------------------------------------------------------------------ ENTITÉS
+  PERSONNE [shape=plaintext, pos="0,6.2!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#4e7d2f">
+    <TR><TD BGCOLOR="#4e7d2f"><FONT COLOR="white"><B>PERSONNE (MDM)</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_personne_mdm</U></TD></TR>
+    <TR><TD ALIGN="LEFT">regle_rapprochement</TD></TR>
+    <TR><TD ALIGN="LEFT">score_confiance</TD></TR>
+    <TR><TD ALIGN="LEFT">nb_comptes_lies</TD></TR></TABLE>>];
+
+  CLIENT [shape=plaintext, pos="0,2.2!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#2e6fae">
+    <TR><TD BGCOLOR="#2e6fae"><FONT COLOR="white"><B>CLIENT</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_client_uni</U></TD></TR>
+    <TR><TD ALIGN="LEFT">id_client_source</TD></TR>
+    <TR><TD ALIGN="LEFT">nom</TD></TR>
+    <TR><TD ALIGN="LEFT">prenom</TD></TR>
+    <TR><TD ALIGN="LEFT">date_naissance</TD></TR>
+    <TR><TD ALIGN="LEFT">email_hash</TD></TR>
+    <TR><TD ALIGN="LEFT">telephone_chiffre</TD></TR>
+    <TR><TD ALIGN="LEFT">adresse</TD></TR>
+    <TR><TD ALIGN="LEFT">code_postal</TD></TR>
+    <TR><TD ALIGN="LEFT">pays</TD></TR>
+    <TR><TD ALIGN="LEFT">num_fiscal_chiffre</TD></TR>
+    <TR><TD ALIGN="LEFT">date_creation_utc</TD></TR>
+    <TR><TD ALIGN="LEFT">statut_client</TD></TR>
+    <TR><TD ALIGN="LEFT">score_fidelite</TD></TR></TABLE>>];
+
+  SOURCE [shape=plaintext, pos="-5.2,-1.3!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7f7f7f">
+    <TR><TD BGCOLOR="#7f7f7f"><FONT COLOR="white"><B>SYSTEME_SOURCE</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>code_systeme</U> (AB | AP)</TD></TR>
+    <TR><TD ALIGN="LEFT">libelle</TD></TR>
+    <TR><TD ALIGN="LEFT">sgbd (Oracle | SQL Server)</TD></TR></TABLE>>];
+
+  CONTRAT [shape=plaintext, pos="6.4,2.2!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#2e6fae">
+    <TR><TD BGCOLOR="#2e6fae"><FONT COLOR="white"><B>CONTRAT</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_contrat_uni</U></TD></TR>
+    <TR><TD ALIGN="LEFT">ref_contrat_source</TD></TR>
+    <TR><TD ALIGN="LEFT">date_debut</TD></TR>
+    <TR><TD ALIGN="LEFT">date_fin</TD></TR>
+    <TR><TD ALIGN="LEFT">prime_annuelle_eur</TD></TR>
+    <TR><TD ALIGN="LEFT">periodicite_source</TD></TR>
+    <TR><TD ALIGN="LEFT">statut_contrat</TD></TR></TABLE>>];
+
+  PRODUIT [shape=plaintext, pos="12.4,5.2!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7f7f7f">
+    <TR><TD BGCOLOR="#7f7f7f"><FONT COLOR="white"><B>PRODUIT</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>code_produit_uni</U></TD></TR>
+    <TR><TD ALIGN="LEFT">libelle</TD></TR>
+    <TR><TD ALIGN="LEFT">codes_source_ab</TD></TR>
+    <TR><TD ALIGN="LEFT">codes_source_ap</TD></TR></TABLE>>];
+
+  DISTRIBUTEUR [shape=plaintext, pos="12.4,0.4!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7f7f7f">
+    <TR><TD BGCOLOR="#7f7f7f"><FONT COLOR="white"><B>DISTRIBUTEUR</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_distributeur</U></TD></TR>
+    <TR><TD ALIGN="LEFT">canal_distribution</TD></TR>
+    <TR><TD ALIGN="LEFT">(AGENCE AB | COURTIER AP)</TD></TR></TABLE>>];
+
+  SINISTRE [shape=plaintext, pos="3.0,-4.6!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#2e6fae">
+    <TR><TD BGCOLOR="#2e6fae"><FONT COLOR="white"><B>SINISTRE</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_sinistre_uni</U></TD></TR>
+    <TR><TD ALIGN="LEFT">id_sinistre_source</TD></TR>
+    <TR><TD ALIGN="LEFT">date_heure_sinistre_utc</TD></TR>
+    <TR><TD ALIGN="LEFT">montant_estime_eur</TD></TR>
+    <TR><TD ALIGN="LEFT">statut_sinistre</TD></TR>
+    <TR><TD ALIGN="LEFT">description_texte</TD></TR>
+    <TR><TD ALIGN="LEFT">score_fraude_source</TD></TR></TABLE>>];
+
+  PAIEMENT [shape=plaintext, pos="9.6,-4.6!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#2e6fae">
+    <TR><TD BGCOLOR="#2e6fae"><FONT COLOR="white"><B>PAIEMENT</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>id_paiement_uni</U></TD></TR>
+    <TR><TD ALIGN="LEFT">id_paiement_source</TD></TR>
+    <TR><TD ALIGN="LEFT">date_heure_paiement_utc</TD></TR>
+    <TR><TD ALIGN="LEFT">montant_eur</TD></TR>
+    <TR><TD ALIGN="LEFT">statut_transaction</TD></TR></TABLE>>];
+
+  MOYEN [shape=plaintext, pos="15.0,-4.6!", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="3" COLOR="#7f7f7f">
+    <TR><TD BGCOLOR="#7f7f7f"><FONT COLOR="white"><B>MOYEN_PAIEMENT</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><U>code_moyen</U></TD></TR>
+    <TR><TD ALIGN="LEFT">libelle</TD></TR></TABLE>>];
+
+  // ------------------------------------------------------------------ ASSOCIATIONS
+  node [shape=ellipse, style=filled, fillcolor="#fdf2d0", color="#b8860b", fontsize=10];
+  correspondre [label=<<B>CORRESPONDRE</B>>, pos="0,4.55!"];
+  souscrire    [label=<<B>SOUSCRIRE</B>>,    pos="3.3,2.2!"];
+  provenir_c   [label=<<B>PROVENIR</B>>,     pos="-3.4,0.2!"];
+  porter_sur   [label=<<B>PORTER_SUR</B>>,   pos="9.6,4.3!"];
+  distribuer   [label=<<B>DISTRIBUER</B>>,   pos="9.6,1.0!"];
+  concerner    [label=<<B>CONCERNER</B>>,    pos="4.3,-1.6!"];
+  regler       [label=<<B>RÉGLER</B>>,       pos="8.3,-1.6!"];
+  utiliser     [label=<<B>UTILISER</B>>,     pos="12.4,-4.6!"];
+
+  PERSONNE -- correspondre [label="1,n"];
+  correspondre -- CLIENT   [label="1,1"];
+  CLIENT -- souscrire      [label="0,n"];
+  souscrire -- CONTRAT     [label="1,1"];
+  CLIENT -- provenir_c     [label="1,1"];
+  provenir_c -- SOURCE     [label="0,n"];
+  CONTRAT -- porter_sur    [label="1,1"];
+  porter_sur -- PRODUIT    [label="0,n"];
+  CONTRAT -- distribuer    [label="0,1"];
+  distribuer -- DISTRIBUTEUR [label="1,n"];
+  CONTRAT -- concerner     [label="0,n"];
+  concerner -- SINISTRE    [label="1,1"];
+  CONTRAT -- regler        [label="0,n"];
+  regler -- PAIEMENT       [label="1,1"];
+  PAIEMENT -- utiliser     [label="0,1"];
+  utiliser -- MOYEN        [label="0,n"];
+
+  // ------------------------------------------------------------------ légende
+  legende [shape=note, style=filled, fillcolor="#f7f7f7", color="#999999", fontsize=9, pos="-4.6,-5.0!",
+           label="Lecture : un CLIENT souscrit 0 à n CONTRATS ;\nun CONTRAT est souscrit par 1 et 1 seul CLIENT.\nUne PERSONNE (golden record MDM) regroupe\n1 à n comptes CLIENT (AB et/ou AP).\nSINISTRE et PAIEMENT proviennent aussi d'un\nSYSTEME_SOURCE (via leur CONTRAT).\nEntités bleues = données métier · vertes = MDM ·\ngrises = référentiels (ref_*)"];
+}

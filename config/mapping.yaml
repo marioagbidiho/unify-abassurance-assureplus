@@ -1,0 +1,107 @@
+# Spécification de data mapping source -> modèle canonique SILVER (schéma silver).
+# C'est la source de vérité partagée par : les jobs Talend (tMap), le code Python/Spark
+# (unify.mapping), les tests (tests/test_mapping_spec.py vérifie que CHAQUE colonne des
+# deux schémas sources est mappée) et la documentation (docs/data_mapping.md).
+#
+# Format : <table source> -> cible + liste de [colonne source, colonne cible, règle]
+
+AB_CLIENT:
+  source: AB
+  target: silver.uni_client
+  columns:
+    - [AB_CLIENT_ID,       id_client_source,      "texte ; clé id_client_uni = UUID déterministe (uuid5)"]
+    - [AB_NOM,             nom,                   "trim, majuscules"]
+    - [AB_PRENOM,          prenom,                "trim, casse Titre"]
+    - [AB_DATE_NAISSANCE,  date_naissance,        "DATE ; rejet si < 1900 ou âge < 16 ans"]
+    - [AB_EMAIL,           email_hash,            "minuscules + HMAC-SHA256 ; invalide -> NULL"]
+    - [AB_TELEPHONE,       telephone_chiffre,     "E.164 puis AES-256-GCM"]
+    - [AB_ADRESSE,         adresse,               "trim, espaces multiples supprimés"]
+    - [AB_CODE_POSTAL,     code_postal,           "5 chiffres, zéro initial rétabli"]
+    - [AB_NUM_FISCAL,      num_fiscal_chiffre,    "AES-256-GCM, jamais utilisé par l'IA"]
+    - [AB_DATE_CREATION,   date_creation_utc,     "Europe/Paris -> UTC"]
+    - [AB_STATUT_CLIENT,   statut_client,         "ref_statut_client"]
+
+AP_USERS:
+  source: AP
+  target: silver.uni_client
+  columns:
+    - [AP_USER_ID,          id_client_source,     "texte ; clé id_client_uni = UUID déterministe (uuid5)"]
+    - [AP_FULL_NAME,        "nom, prenom",        "découpage split_full_name"]
+    - [AP_BIRTH_DATE,       date_naissance,       "VARCHAR(10) YYYY-MM-DD -> DATE ; invalide -> quarantaine"]
+    - [AP_MAIL_ADDRESS,     email_hash,           "minuscules + HMAC-SHA256"]
+    - [AP_PHONE_NUMBER,     telephone_chiffre,    "E.164 puis AES-256-GCM"]
+    - [AP_STREET_ADDRESS,   adresse,              "trim"]
+    - [AP_ZIP_CODE,         code_postal,          "5 chiffres"]
+    - [AP_CREATED_AT,       date_creation_utc,    "Europe/Paris -> UTC"]
+    - [AP_CUSTOMER_STATUS,  statut_client,        "ref_statut_client"]
+    - [AP_LOYALTY_SCORE,    score_fidelite,       "INT 0-100 ; NULL côté AB (pas d'imputation en SILVER)"]
+
+AB_CONTRAT:
+  source: AB
+  target: silver.uni_contrat
+  columns:
+    - [AB_POLICY_NUMBER,    ref_contrat_source,   "clé id_contrat_uni = uuid5"]
+    - [AB_CLIENT_ID,        id_client_uni,        "uuid5('client','AB',id)"]
+    - [AB_TYPE_ASSURANCE,   code_produit_uni,     "ref_produit"]
+    - [AB_DATE_DEBUT,       date_debut,           "DATE"]
+    - [AB_DATE_FIN,         date_fin,             "DATE ; rejet si date_fin < date_debut"]
+    - [AB_PRIME_ANNUELLE,   prime_annuelle_eur,   "DECIMAL ; periodicite_source = ANNUELLE"]
+    - [AB_STATUT_CONTRAT,   statut_contrat,       "ref_statut_contrat"]
+    - [AB_AGENCE_ID,        id_distributeur,      "canal_distribution = AGENCE"]
+
+AP_CONTRACTS:
+  source: AP
+  target: silver.uni_contrat
+  columns:
+    - [AP_CONTRACT_REF,     ref_contrat_source,   "clé id_contrat_uni = uuid5"]
+    - [AP_USER_ID,          id_client_uni,        "uuid5('client','AP',id)"]
+    - [AP_PRODUCT_CODE,     code_produit_uni,     "ref_produit"]
+    - [AP_START_DATE,       date_debut,           "DATETIME -> DATE"]
+    - [AP_END_DATE,         date_fin,             "DATETIME -> DATE"]
+    - [AP_MONTHLY_PREMIUM,  prime_annuelle_eur,   "x 12 ; periodicite_source = MENSUELLE"]
+    - [AP_CONTRACT_STATE,   statut_contrat,       "ref_statut_contrat"]
+    - [AP_BROKER_CODE,      id_distributeur,      "canal_distribution = COURTIER"]
+
+AB_SINISTRE:
+  source: AB
+  target: silver.uni_sinistre
+  columns:
+    - [AB_CLAIM_ID,         id_sinistre_source,   "clé id_sinistre_uni = uuid5"]
+    - [AB_POLICY_NUMBER,    id_contrat_uni,       "uuid5('contrat','AB',ref)"]
+    - [AB_DATE_SINISTRE,    date_heure_sinistre_utc, "TIMESTAMP Europe/Paris -> UTC"]
+    - [AB_MONTANT_ESTIME,   montant_estime_eur,   "DECIMAL >= 0"]
+    - [AB_STATUT_SINISTRE,  statut_sinistre,      "ref_statut_sinistre"]
+    - [AB_DESCRIPTION,      description_texte,    "CLOB ; e-mails / téléphones / IBAN masqués"]
+
+AP_CLAIMS:
+  source: AP
+  target: silver.uni_sinistre
+  columns:
+    - [AP_SINISTRE_NUM,     id_sinistre_source,   "clé id_sinistre_uni = uuid5"]
+    - [AP_CONTRACT_REF,     id_contrat_uni,       "uuid5('contrat','AP',ref)"]
+    - [AP_INCIDENT_DATE,    date_heure_sinistre_utc, "VARCHAR(19) -> TIMESTAMP -> UTC ; invalide -> quarantaine"]
+    - [AP_ESTIMATED_AMOUNT, montant_estime_eur,   "DECIMAL >= 0"]
+    - [AP_CLAIM_STATUS,     statut_sinistre,      "ref_statut_sinistre"]
+    - [AP_CLAIM_COMMENT,    description_texte,    "NVARCHAR(MAX) ; données personnelles masquées"]
+    - [AP_FRAUD_SCORE,      score_fraude_source,  "conservé pour analyse, INTERDIT comme label ou feature"]
+
+AB_PAIEMENT:
+  source: AB
+  target: silver.uni_paiement
+  columns:
+    - [AB_PAYMENT_ID,       id_paiement_source,   "NUMBER -> texte ; clé uuid5"]
+    - [AB_POLICY_NUMBER,    id_contrat_uni,       "uuid5('contrat','AB',ref)"]
+    - [AB_DATE_PAIEMENT,    date_heure_paiement_utc, "DATE -> TIMESTAMP 00:00 Europe/Paris -> UTC"]
+    - [AB_MONTANT,          montant_eur,          "DECIMAL ; rejet si <= 0"]
+    - [AB_MODE_PAIEMENT,    moyen_paiement,       "ref_moyen_paiement ; statut_transaction = NON_RENSEIGNE"]
+
+AP_PAYMENTS:
+  source: AP
+  target: silver.uni_paiement
+  columns:
+    - [AP_PAYMENT_REF,        id_paiement_source,   "GUID -> texte minuscules ; clé uuid5"]
+    - [AP_CONTRACT_REF,       id_contrat_uni,       "uuid5('contrat','AP',ref)"]
+    - [AP_PAYMENT_DATETIME,   date_heure_paiement_utc, "DATETIME Europe/Paris -> UTC"]
+    - [AP_AMOUNT_PAID,        montant_eur,          "DECIMAL ; rejet si <= 0"]
+    - [AP_PAYMENT_CHANNEL,    moyen_paiement,       "ref_moyen_paiement"]
+    - [AP_TRANSACTION_STATUS, statut_transaction,   "ref_statut_transaction"]

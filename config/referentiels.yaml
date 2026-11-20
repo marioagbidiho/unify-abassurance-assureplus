@@ -1,0 +1,43 @@
+# Référentiels unifiés (tables ref_*) : chaque code source (AB = Oracle, AP = SQL Server)
+# est traduit vers un code unique. Les codes sont comparés après normalisation
+# (majuscules, sans accents, espaces -> "_"). Un code absent du référentiel n'est PAS
+# deviné : la ligne est signalée par la règle qualité REF_INCONNU.
+
+ref_produit:
+  AUTO:        {libelle: "Assurance automobile",      ab: [AUTO, AUTOMOBILE],                  ap: [AUTO_STD, AUTO_PREMIUM, AUTO]}
+  HABITATION:  {libelle: "Multirisque habitation",    ab: [HABITATION, MRH],                   ap: [HOME]}
+  SANTE:       {libelle: "Complémentaire santé",      ab: [SANTE, MUTUELLE],                   ap: [HEALTH]}
+  PRO:         {libelle: "Assurance professionnelle", ab: [PRO, PROFESSIONNELLE, MULTIRISQUE_PRO], ap: [BUSINESS]}
+  ASSISTANCE:  {libelle: "Assistance premium",        ab: [ASSISTANCE],                        ap: [ASSIST_PREMIUM, ASSISTANCE]}
+
+ref_statut_client:
+  ACTIF:    {libelle: "Client actif",   ab: [ACTIF, A],          ap: [ACTIVE]}
+  INACTIF:  {libelle: "Client inactif", ab: [INACTIF, I],        ap: [INACTIVE]}
+  PROSPECT: {libelle: "Prospect",       ab: [PROSPECT],          ap: [PROSPECT, LEAD]}
+  RADIE:    {libelle: "Client radié",   ab: [RADIE, CLOS],       ap: [CLOSED, DELETED]}
+
+ref_statut_contrat:
+  EN_COURS: {libelle: "Contrat en cours", ab: [EN_COURS, ACTIF, VALIDE], ap: [ACTIVE, IN_FORCE]}
+  SUSPENDU: {libelle: "Contrat suspendu", ab: [SUSPENDU],                ap: [SUSPENDED]}
+  RESILIE:  {libelle: "Contrat résilié",  ab: [RESILIE, RESILIATION],    ap: [CANCELLED, TERMINATED]}
+  EXPIRE:   {libelle: "Contrat expiré",   ab: [EXPIRE, ECHU],            ap: [EXPIRED]}
+
+ref_statut_sinistre:
+  OUVERT:         {libelle: "Déclaré",         ab: [OUVERT, DECLARE],          ap: [OPEN, REPORTED]}
+  EN_INSTRUCTION: {libelle: "En instruction",  ab: [EN_COURS, INSTRUCTION],    ap: [IN_PROGRESS, UNDER_REVIEW]}
+  CLOS_INDEMNISE: {libelle: "Clos - indemnisé", ab: [CLOS, INDEMNISE, REGLE],  ap: [CLOSED, PAID, SETTLED]}
+  REFUSE:         {libelle: "Refusé",          ab: [REFUSE, REJETE],           ap: [REJECTED, DENIED]}
+
+ref_moyen_paiement:
+  PRELEVEMENT:  {libelle: "Prélèvement SEPA", ab: [PRELEVEMENT, PRLV], ap: [DIRECT_DEBIT, SEPA_DD]}
+  CARTE:        {libelle: "Carte bancaire",   ab: [CB, CARTE],         ap: [CARD, CREDIT_CARD]}
+  VIREMENT:     {libelle: "Virement",         ab: [VIREMENT, VIR],     ap: [TRANSFER, BANK_TRANSFER]}
+  CHEQUE:       {libelle: "Chèque",           ab: [CHEQUE, CHQ],       ap: [CHECK]}
+  APPLI_MOBILE: {libelle: "Application mobile", ab: [],                ap: [MOBILE_APP, APPLE_PAY]}
+
+ref_statut_transaction:
+  REUSSI:         {libelle: "Paiement réussi",    ab: [],  ap: [SUCCESS, COMPLETED, OK]}
+  REJETE:         {libelle: "Paiement rejeté",    ab: [],  ap: [FAILED, REJECTED]}
+  EN_ATTENTE:     {libelle: "En attente",         ab: [],  ap: [PENDING]}
+  REMBOURSE:      {libelle: "Remboursé",          ab: [],  ap: [REFUNDED]}
+  NON_RENSEIGNE:  {libelle: "Non renseigné (AB)", ab: [],  ap: []}
