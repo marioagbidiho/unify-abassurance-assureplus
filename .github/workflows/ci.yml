@@ -31,6 +31,8 @@ jobs:
     name: Tests unitaires + intégration Spark + couverture
     runs-on: ubuntu-latest
     needs: lint
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # analyse CI (avec couverture) si le secret existe
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }            # historique complet requis par SonarCloud
@@ -52,11 +54,13 @@ jobs:
             coverage.xml
             htmlcov/
             reports/junit.xml
-      - name: Analyse SonarCloud (Quality Gate)
+      # Par défaut, SonarCloud analyse le dépôt en « Automatic Analysis » à chaque push.
+      # Pour importer aussi la couverture : désactiver l'Automatic Analysis et créer le
+      # secret SONAR_TOKEN ; cette étape prend alors le relais.
+      - name: Analyse SonarCloud (Quality Gate + couverture)
         if: env.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@v5
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
