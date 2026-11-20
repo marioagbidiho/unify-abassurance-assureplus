@@ -195,3 +195,16 @@ def test_redaction_regex_is_linear_on_adversarial_input():
     start = time.perf_counter()
     security.redact_free_text(hostile)
     assert time.perf_counter() - start < 1.0
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("écrire à jean@x.fr.", "écrire à [EMAIL]"),
+        ("adresse a@b invalide", "adresse a@b invalide"),
+        ("deux: a@b.fr  c@d.com", "deux: [EMAIL]  [EMAIL]"),
+        ("@x.fr seul", "@x.fr seul"),
+    ],
+)
+def test_redact_emails_without_regex(raw, expected):
+    assert security.redact_free_text(raw) == expected
